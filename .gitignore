@@ -335,3 +335,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/java,linux,macos,windows,android,intellij,androidstudio
+.idea/artifacts/kotlin_mpp_library_js_1_0_SNAPSHOT.xml
+.idea/artifacts
+.idea/gradle.xml
+.idea/jarRepositories.xml
