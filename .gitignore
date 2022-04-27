@@ -1,0 +1,11 @@
+.gradle
+build
+.DS_Store
+*.hprof
+
+
+local.properties
+ephemeris/src/androidMain/res/raw/ephemeris_bin
+.idea/artifacts/ephemeris_desktop_1_0_5.xml
+ephemeris/src/desktopMain/resources/ephemeris_bin
+ephemeris/src/jvmMain/resources/ephemeris_bin
