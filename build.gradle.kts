@@ -1,7 +1,9 @@
+import java.util.Properties
+
 plugins {
-    kotlin("multiplatform") version "1.6.20"
+    kotlin("multiplatform")
+    id("org.jetbrains.compose")
     id("com.android.library")
-    id("kotlin-android-extensions")
 }
 
 group = "com.meowbox"
@@ -9,8 +11,20 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     google()
-    jcenter()
     mavenCentral()
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/tylergannon/polestar-ephemeris")
+        credentials {
+            val props = Properties()
+            props.load(File("${rootProject.projectDir.path}/local.properties").bufferedReader())
+
+            fun envGet(name: String) = System.getenv(name)!!
+            username = (props["gpr.user"] ?: envGet("USERNAME")).toString()
+            password = (props["gpr.key"] ?: envGet("TOKEN")).toString()
+        }
+    }
 }
 
 kotlin {
@@ -30,12 +44,6 @@ kotlin {
         }
     }
     android()
-    js("node", IR) {
-        binaries.executable()
-        nodejs {
-
-        }
-    }
     sourceSets {
         val commonMain by getting
         val commonTest by getting {
@@ -57,12 +65,6 @@ kotlin {
                 implementation("junit:junit:4.13")
             }
         }
-        val nodeMain by getting {
-            dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-nodejs:0.0.7")
-            }
-        }
-        val nodeTest by getting
     }
 }
 
