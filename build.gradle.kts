@@ -9,8 +9,8 @@ plugins {
     id("maven-publish")
 }
 
-group = "com.meowbox"
-version = "1.0-SNAPSHOT"
+group = "<<[ .ctx.project.group ]>> "
+version = "<<[ .ctx.project.version ]>> "
 val mvnArtifactId = name
 
 repositories {
@@ -107,7 +107,7 @@ android {
 
 val SetupProjectPackageRepo: MavenArtifactRepository.() -> Unit = {
     name = "GitHubPackages"
-    url = uri("https://maven.pkg.github.com/tylergannon/polestar-ephemeris")
+    url = uri("<<[ .ctx.publishing.repo ]>>")
     credentials {
         val props = Properties()
         props.load(rootProject.file("local.properties").bufferedReader())
