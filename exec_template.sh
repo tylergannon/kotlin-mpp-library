@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 
-ignore_files=".git|node_modules|_templates|customize|README.md|build|.idea|.gradle"
+ignore_files=".git|node_modules|_templates|customize|README.md|build|.idea"
+ignore_files="$ignore_files|.gradle|*.jar|kotlin-js-store|exec_template.sh|.DS_Store|gradlew.bat"
 
 for input_file in `tree -I "${ignore_files}" -Ffai --noreport`
 do
   if [ ! -d "${input_file}" ]; then
     echo "Processing file: ${input_file}"
-    gomplate \
-         -f "${input_file}" \
-         -o "${input_file}" \
-         --left-delim "<<[" \
-         --right-delim "]>>"
+    [[ -x "${input_file}" ]] && EXEC=1 || EXEC=0
+         jinja -d ./project.yaml ${input_file} -o ./out
+         mv ./out ${input_file}
+    if [[ "$EXEC" -eq "1" ]] ; then
+      echo ${input_file} should be executable.
+      chmod +x ${input_file}
+    fi
   fi
 done
 

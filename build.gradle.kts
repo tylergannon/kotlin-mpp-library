@@ -9,8 +9,8 @@ plugins {
     id("maven-publish")
 }
 
-group = "<<[ .ctx.project.group ]>> "
-version = "<<[ .ctx.project.version ]>> "
+group = "{{ project.group }}"
+version = "{{ project.version }}"
 val mvnArtifactId = name
 
 repositories {
@@ -107,7 +107,7 @@ android {
 
 val SetupProjectPackageRepo: MavenArtifactRepository.() -> Unit = {
     name = "GitHubPackages"
-    url = uri("<<[ .ctx.publishing.repo ]>>")
+    url = uri("{{ publishing.repo }}")
     credentials {
         val props = Properties()
         props.load(rootProject.file("local.properties").bufferedReader())

@@ -1,4 +1,3 @@
----
 project:
   name: kotlin-mpp-library
   package: com.meowbox.library
@@ -8,9 +7,9 @@ dependencies:
   agp: 7.0.4
   compose: 1.2.0-alpha01-dev675
   kotlin: 1.6.21
-  kotlinx-coroutines: 1.6.1
-  kotlinx-datetime: 0.3.2
-  realm-library: 0.10.2
+  kotlinx_coroutines: 1.6.1
+  kotlinx_datetime: 0.3.2
+  realm_library: 0.10.2
   realm: 0.10.2
 publishing:
   repo: https://maven.pkg.github.com/tylergannon/polestar-ephemeris
