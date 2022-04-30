@@ -36,13 +36,16 @@ kotlin {
             }
         }
     }
-    android()
+    
+    android {
         publishLibraryVariants = listOf("release", "debug")
     }
 
     sourceSets {
         val commonMain by getting {
-            implementation("com.github.kittinunf.result:result:5.2.1")
+            dependencies {
+                implementation("com.github.kittinunf.result:result:5.2.1")
+            }
         }
         val commonTest by getting {
             dependencies {
