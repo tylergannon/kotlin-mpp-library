@@ -44,7 +44,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("com.github.kittinunf.result:result:5.2.1")
+                implementation(kotlin("stdlib-common"))
             }
         }
         val commonTest by getting {
