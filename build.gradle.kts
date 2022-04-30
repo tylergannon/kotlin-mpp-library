@@ -37,6 +37,9 @@ kotlin {
         }
     }
     android()
+        publishLibraryVariants = listOf("release", "debug")
+    }
+
     sourceSets {
         val commonMain by getting {
             implementation("com.github.kittinunf.result:result:5.2.1")
@@ -105,25 +108,45 @@ android {
  */
 
 
-val SetupProjectPackageRepo: MavenArtifactRepository.() -> Unit = {
-    name = "GitHubPackages"
-    url = uri("{{ publishing.repo }}")
-    credentials {
-        val props = Properties()
-        props.load(rootProject.file("local.properties").bufferedReader())
-
-        fun envGet(name: String) = System.getenv(name)!!
-        username = (props["gpr.user"] ?: envGet("USERNAME")).toString()
-        password = (props["gpr.key"] ?: envGet("TOKEN")).toString()
+val privateMvnRepo: RepositoryHandler.(String) -> Unit = { repoName ->
+    maven {
+        this.name = "GitHubPackages"
+        this.url = uri("https://maven.pkg.github.com/tylergannon/$repoName")
+        credentials {
+            Properties().also { props ->
+                props.load(rootProject.file("local.properties").bufferedReader())
+                username = props["gpr.user"].toString()
+                password = props["gpr.key"].toString()
+            }
+        }
     }
 }
 
 publishing {
     repositories {
-        maven(SetupProjectPackageRepo)
+        privateMvnRepo("{{ project.name }}")
     }
 }
 
+
+afterEvaluate {
+    configure<PublishingExtension> {
+        publications.all {
+            val mavenPublication = this as? MavenPublication
+            mavenPublication?.artifactId = makeArtifactId(name)
+        }
+    }
+}
+
+configure<PublishingExtension> {
+    publications {
+        withType<MavenPublication> {
+            groupId = "{{ project.package }}"
+            artifactId = makeArtifactId(name)
+            version
+        }
+    }
+}
 
 fun String.dasherize() = fold("") {acc, value ->
     if (value.isUpperCase()) {
@@ -140,22 +163,3 @@ fun makeArtifactId(name: String) =
         "$mvnArtifactId-${name.dasherize()}"
     }
 
-
-afterEvaluate {
-    configure<PublishingExtension> {
-        publications.all {
-            val mavenPublication = this as? MavenPublication
-            mavenPublication?.artifactId = makeArtifactId(name)
-        }
-    }
-}
-
-configure<PublishingExtension> {
-    publications {
-        withType<MavenPublication> {
-            groupId = "com.meowbox.fourpillars"
-            artifactId = makeArtifactId(name)
-            version
-        }
-    }
-}
